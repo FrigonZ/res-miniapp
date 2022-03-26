@@ -8,6 +8,8 @@
 
 视觉稿: https://www.figma.com/file/KoYYJJWU6OzxWxPbdkvmWm/res-miniapp?node-id=0%3A1;
 
+api文档: https://github.com/FrigonZ/res-online/blob/main/api.md;
+
 ## 开发计划
 
 ### 一期
