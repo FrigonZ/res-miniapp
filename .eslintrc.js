@@ -12,9 +12,10 @@ module.exports = {
   ecmaFeatures: {
     modules: true,
   },
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2018,
     sourceType: 'module',
+    project: './tsconfig.json'
   },
   globals: {
     wx: true,
@@ -26,6 +27,12 @@ module.exports = {
     requirePlugin: true,
     requireMiniProgram: true,
   },
-  extends: 'eslint:recommended',
-  rules: {},
+  extends: [
+    'eslint:recommended',
+    'airbnb',
+    'airbnb-typescript',
+  ],
+  rules: {
+    'import/prefer-default-export': 'off'
+  },
 }

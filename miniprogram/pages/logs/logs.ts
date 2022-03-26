@@ -1,6 +1,6 @@
 // logs.ts
 // const util = require('../../utils/util.js')
-import { formatTime } from '../../utils/util'
+import { formatTime } from '../../utils/time';
 
 Page({
   data: {
@@ -8,12 +8,10 @@ Page({
   },
   onLoad() {
     this.setData({
-      logs: (wx.getStorageSync('logs') || []).map((log: string) => {
-        return {
-          date: formatTime(new Date(log)),
-          timeStamp: log
-        }
-      }),
-    })
+      logs: (wx.getStorageSync('logs') || []).map((log: string) => ({
+        date: formatTime(new Date(log)),
+        timeStamp: log,
+      })),
+    });
   },
-})
+});
