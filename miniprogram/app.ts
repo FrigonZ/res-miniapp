@@ -1,5 +1,6 @@
 import { CGI } from './constant/request';
 import { requestWithPromise } from './utils/request';
+import { setToken } from './utils/token';
 
 // app.ts
 App<IAppOption>({
@@ -25,6 +26,7 @@ App<IAppOption>({
           const { token } = resData;
           if (token) {
             this.globalData.token = token;
+            setToken(token);
           }
         }
       },
