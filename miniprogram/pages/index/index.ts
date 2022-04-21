@@ -1,16 +1,19 @@
 // index.ts
+
+import { CGI } from "../../constant/request";
+import { requestWithPromise } from "../../utils/request";
+
 // 获取应用实例
-const app = getApp<IAppOption>();
+// const app = getApp<IAppOption>();
 
 Page({
   data: {
-    motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     canIUseGetUserProfile: false,
     canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
-    jwt: '',
+    dishes: [],
   },
   // 事件处理函数
   bindViewTap() {
@@ -25,11 +28,16 @@ Page({
         canIUseGetUserProfile: true,
       });
     }
-    if (app.globalData.token) {
+
+    requestWithPromise({
+      url: CGI.DISH,
+      method: 'GET',
+      data: {},
+    }).then((res) => {
       this.setData({
-        jwt: app.globalData.token,
+        dishes: res.dishList || [],
       });
-    }
+    })
   },
   getUserProfile() {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
@@ -50,9 +58,18 @@ Page({
       hasUserInfo: true,
     });
   },
-  setJwt() {
-    this.setData({
-      jwt: app.globalData.token,
-    });
-  },
+  submitOrder() {
+    requestWithPromise({
+      url: CGI.ORDER,
+      method: 'POST',
+      data: {
+        order: {
+          seat: '1',
+        },
+        dishes: this.data.dishes.slice(0,4).map((dish) => ({
+          dish,
+        })),
+      },
+    }).then((res) => console.log(res));
+  }
 });

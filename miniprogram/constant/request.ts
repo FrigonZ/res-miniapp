@@ -1,5 +1,9 @@
+export const BASE_URL = 'http://127.0.0.1:8080/api';
+
 export const CGI = {
-  LOGIN: 'http://127.0.0.1:8080/api/login',
+  LOGIN: '/login',
+  DISH: '/dish',
+  ORDER: '/order',
 };
 
 /** 返回错误码 */
