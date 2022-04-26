@@ -4,6 +4,7 @@ export const CGI = {
   LOGIN: '/login',
   DISH: '/dish',
   ORDER: '/order',
+  GROUP: '/group',
 };
 
 /** 返回错误码 */

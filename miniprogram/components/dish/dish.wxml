@@ -1,0 +1,22 @@
+<view class="dish-container">
+  <image
+    class="dish-image"
+    src="{{dish.pic}}"
+    mode="aspectFill"
+  >
+  </image>
+  <view class="dish-right">
+    <view class="dish-name">{{dish.name}}</view>
+    <text class="dish-desc">{{dish.desc}}</text>
+    <view class="dish-bottom">
+      <view class="dish-price">{{'¥' + dish.price}}</view>
+      <image
+        class="add-dish"
+        src="{{icon}}"
+        mode="aspectFit"
+        data-did="{{dish.did}}"
+        bindtap="add"
+      ></image>
+    </view>
+  </view>
+</view>

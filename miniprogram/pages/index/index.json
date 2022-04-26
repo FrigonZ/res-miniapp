@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "Dish": "/components/dish/dish",
+    "Bucket": "/components/bucket/bucket"
+  }
 }

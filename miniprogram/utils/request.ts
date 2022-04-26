@@ -21,6 +21,7 @@ export const requestWithPromise = (
       if (code === ResCode.SUCCESS) {
         resolve(data);
       } else {
+        console.log(res);
         resolve({});
       }
     },
