@@ -1,7 +1,12 @@
 // index.ts
 
-import { CGI } from "../../constant/request";
-import { requestWithPromise } from "../../utils/request";
+import { CGI } from '../../constant/request';
+import { requestWithPromise } from '../../utils/request';
+import { DishProps, DishStatus } from '../../constant/entity';
+import {
+  calcPrice, checkAndAdd, formatBucket, removeBucket,
+} from '../../utils/dish';
+import { IMAGE } from '../../constant/image';
 
 // 获取应用实例
 // const app = getApp<IAppOption>();
@@ -14,14 +19,23 @@ Page({
     canIUseGetUserProfile: false,
     canIUseOpenData: wx.canIUse('open-data.type.userAvatarUrl') && wx.canIUse('open-data.type.userNickName'), // 如需尝试获取用户信息可改为false
     dishes: [],
+    groups: [],
+    canScroll: false,
+    seat: '1',
+    buckets: [],
+    price: 0,
+    canShowBucket: false,
+    currentGroup: 0,
+    scrollTo: '',
+    banner: IMAGE.BANNER,
   },
   // 事件处理函数
-  bindViewTap() {
+  jumpToOrder() {
     wx.navigateTo({
-      url: '../logs/logs',
+      url: '../order/order',
     });
   },
-  onLoad() {
+  onLoad(query) {
     // @ts-ignore
     if (wx.getUserProfile) {
       this.setData({
@@ -29,15 +43,35 @@ Page({
       });
     }
 
+    const { seat = '1' } = query;
+
+    this.setData({
+      seat,
+    });
+
     requestWithPromise({
-      url: CGI.DISH,
+      url: CGI.GROUP,
       method: 'GET',
       data: {},
-    }).then((res) => {
-      this.setData({
-        dishes: res.dishList || [],
+    }).then((groupRes) => {
+      const { groups = [] } = groupRes;
+      requestWithPromise({
+        url: CGI.DISH,
+        method: 'GET',
+        data: {},
+      }).then((dishRes) => {
+        const { dishList = [] } = dishRes;
+        groups.forEach((group: any) => {
+          group.dishes =
+            dishList.filter((dish: DishProps) => dish.group === group.gid && dish.status === DishStatus.NORMAL) || [];
+        });
+        this.setData({
+          groups,
+          dishes: dishList,
+          currentGroup: groups[0].gid,
+        });
       });
-    })
+    });
   },
   getUserProfile() {
     // 推荐使用wx.getUserProfile获取用户信息，开发者每次通过该接口获取用户个人信息均需用户确认，开发者妥善保管用户快速填写的头像昵称，避免重复弹窗
@@ -58,18 +92,71 @@ Page({
       hasUserInfo: true,
     });
   },
+  handleDragUp() {
+    this.setData({
+      canScroll: false,
+    });
+  },
+  handleDragLow() {
+    this.setData({
+      canScroll: true,
+    });
+  },
+  setGroup(e: any) {
+    const { gid } = e.currentTarget.dataset;
+    const { canScroll } = this.data;
+    this.setData({
+      canScroll: true,
+    });
+    this.setData({
+      currentGroup: gid,
+      scrollTo: `g-${gid}`,
+      canScroll,
+    });
+  },
+  addBucket(e: any) {
+    const { did } = e.detail;
+    const dish = this.data.dishes.find((d: DishProps) => d.did === did);
+    if (!dish) return;
+    const bucket = checkAndAdd(this.data.buckets, dish);
+    const price = calcPrice(bucket);
+    this.setData({
+      buckets: bucket as any,
+      price,
+    });
+  },
+  minusBucket(e: any) {
+    const { bid } = e.detail;
+    const bucket = removeBucket(this.data.buckets, bid);
+    const price = calcPrice(bucket);
+    this.setData({
+      buckets: bucket as any,
+      price,
+    });
+  },
+  toggleBucket() {
+    this.setData({
+      canShowBucket: !this.data.canShowBucket,
+    });
+  },
   submitOrder() {
+    const formatBuckets = formatBucket(this.data.buckets);
     requestWithPromise({
       url: CGI.ORDER,
       method: 'POST',
       data: {
         order: {
-          seat: '1',
+          seat: this.data.seat,
         },
-        dishes: this.data.dishes.slice(0,4).map((dish) => ({
-          dish,
-        })),
+        dishes: formatBuckets,
       },
-    }).then((res) => console.log(res));
-  }
+    }).then((res) => {
+      const { order } = res;
+      if (order) {
+        this.setData({
+          buckets: [],
+        });
+      }
+    });
+  },
 });

@@ -1,0 +1,31 @@
+<view class="bucket-container">
+  <image
+    class="bucket-image"
+    src="{{bucket.pic}}"
+    mode="aspectFill"
+  >
+  </image>
+  <view class="bucket-right">
+    <view class="bucket-name">{{bucket.name}}</view>
+    <view class="bucket-bottom">
+      <view class="bucket-price">{{'¥' + bucket.price}}</view>
+      <view class="bucket-buttons">
+        <image
+          class="add-bucket"
+          src="{{minusImage}}"
+          mode="aspectFit"
+          data-bid="{{bucket.bid}}"
+          bindtap="minus"
+        ></image>
+        <text>{{bucket.options.length}}</text>
+        <image
+          class="add-bucket"
+          src="{{addImage}}"
+          mode="aspectFit"
+          data-did="{{bucket.did}}"
+          bindtap="add"
+        ></image>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,75 +1,101 @@
-/** 用户信息 */
-export interface UserInfo {
-  id: string;
-  name: string;
-}
-
-/** 菜品 */
-export interface MenuItem {
-  /** 菜品id */
-  id: string;
-  /** 菜名 */
-  name: string;
-  /** 菜品描述 */
-  desc: string;
-  /** 菜品图片 */
-  pic: string;
-  /** 菜品价格 */
-  price: number;
-  /** 菜品状态 */
-  status: MenuItemStatus;
-  /** 菜品标签 */
-  tags?: string[];
-  /** 菜品选项 */
-  options?: MenuItemOption[];
-}
-
-/** 菜品状态 */
-export const enum MenuItemStatus {
+/** 餐品状态 */
+export const enum DishStatus {
   /** 正常 */
   NORMAL,
   /** 售罄 */
   SOLD_OUT,
   /** 下架 */
-  TAKE_DOWN,
+  CLOSED,
 }
 
-/** 菜单选项 */
-export interface MenuItemOption {
-  /** 选项分类 */
-  name: string;
-  /** 选项内容 */
-  choice: MenuItemChoice[];
-}
-
-/** 选项内容 */
-export interface MenuItemChoice {
+/** 餐品自定义 */
+export interface DishOption {
+  /** 分组名 */
+  group?: string;
   /** 选项名 */
+  names?: string[];
+  /** 选项价格 */
+  prices?: number[];
+  /** 是否多选 */
+  isMulti?: boolean;
+}
+
+export interface DishProps {
+  /** id */
+  did?: string;
+  /** 餐品名 */
   name: string;
-  /** 价格调整 */
+  /** 餐品价格 */
   price: number;
+  /** 餐品图片 */
+  pic?: string;
+  /** 餐品描述 */
+  desc?: string;
+  /** 是否为必选品 */
+  isNecessary: boolean;
+  /** 餐品状态 */
+  status?: DishStatus;
+  /** 餐品自定义 */
+  options?: DishOption[];
+  /** 分组 */
+  group?: number;
 }
 
-/** 点单项 */
-export interface OrderItem extends MenuItem{
-  /** 选项选择 */
-  decisions?: Record<string, number>;
+export interface DishBucket {
+  bid?: number;
+  /** id */
+  did?: string;
+  /** 餐品名 */
+  name: string;
+  /** 餐品价格 */
+  price: number;
+  /** 餐品图片 */
+  pic?: string;
+  /** 餐品描述 */
+  desc?: string;
+  /** 是否为必选品 */
+  isNecessary: boolean;
+  /** 餐品状态 */
+  status?: DishStatus;
+  /** 餐品自定义 */
+  options: DishOption[][];
+  /** 分组 */
+  group?: number;
 }
 
-/** 订单 */
-export interface Order {
-  /** 订单id */
-  id: string;
-  /** 订单时间 */
-  time: number;
-  /** 订单内容 */
-  items: OrderItem[];
-  /** 订单总价格 */
-  totalPrice: number;
-  /** 座位 */
-  seat: string;
-  /** 订单状态 */
-  status: OrderStatus;
+export interface DishForm {
+  /** id */
+  did?: string;
+  /** 餐品名 */
+  name: string;
+  /** 餐品价格 */
+  price: number;
+  /** 餐品图片 */
+  pic?: string;
+  /** 餐品描述 */
+  desc?: string;
+  /** 是否为必选品 */
+  isNecessary: 0 | 1;
+  /** 餐品状态 */
+  status?: DishStatus;
+  /** 餐品自定义 */
+  options?: DishOption[];
+}
+
+/** 订单接口行为 */
+export const enum OrderAction {
+  /** 获取订单列表 */
+  GET,
+  /** 调整订单状态 */
+  SET,
+  /** 确认消息 */
+  CONFIRM,
+  /** 心跳消息 */
+  HEART_BEAT,
+  /** 终止连接 */
+  FINISH,
+  /** 鉴权失败 */
+  AUTH_FAIL,
 }
 
 /** 订单状态 */
@@ -80,4 +106,28 @@ export const enum OrderStatus {
   FINISHED,
   /** 取消 */
   CANCELED,
+}
+
+export interface DishGroup {
+  gid: number,
+  name: string,
+}
+
+export interface OrderDish {
+  did: number;
+  option?: DishOption;
+}
+
+export interface FormatDish extends OrderDish {
+  num: number;
+}
+
+export interface Order {
+  oid: number;
+  time: Date;
+  status: OrderStatus;
+  seat: string;
+  uid: number;
+  dishes: OrderDish[];
+  price: number;
 }
