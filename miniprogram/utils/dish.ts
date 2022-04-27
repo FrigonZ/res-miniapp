@@ -52,5 +52,6 @@ export const formatBucket = (bucket: DishBucket[]) => {
     });
   });
 
+  console.log(bucket, output);
   return output;
 };

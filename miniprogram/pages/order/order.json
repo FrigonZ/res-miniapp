@@ -1,4 +1,7 @@
 {
-  "navigationBarTitleText": "查看启动日志",
-  "usingComponents": {}
+  "navigationBarTitleText": "我的订单",
+  "usingComponents": {
+    "Order": "/components/order/order",
+    "order-detail": "/components/order-detail/order-detail"
+  }
 }

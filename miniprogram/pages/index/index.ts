@@ -9,7 +9,7 @@ import {
 import { IMAGE } from '../../constant/image';
 
 // 获取应用实例
-// const app = getApp<IAppOption>();
+const app = getApp<IAppOption>();
 
 Page({
   data: {
@@ -54,13 +54,13 @@ Page({
       method: 'GET',
       data: {},
     }).then((groupRes) => {
-      const { groups = [] } = groupRes;
+      const { groups = [] } = groupRes || {};
       requestWithPromise({
         url: CGI.DISH,
         method: 'GET',
         data: {},
       }).then((dishRes) => {
-        const { dishList = [] } = dishRes;
+        const { dishList = [] } = dishRes || {};
         groups.forEach((group: any) => {
           group.dishes =
             dishList.filter((dish: DishProps) => dish.group === group.gid && dish.status === DishStatus.NORMAL) || [];
@@ -70,6 +70,7 @@ Page({
           dishes: dishList,
           currentGroup: groups[0].gid,
         });
+        app.globalData.dishes = dishList;
       });
     });
   },
@@ -151,7 +152,7 @@ Page({
         dishes: formatBuckets,
       },
     }).then((res) => {
-      const { order } = res;
+      const { order } = res || {};
       if (order) {
         this.setData({
           buckets: [],

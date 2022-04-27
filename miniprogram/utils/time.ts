@@ -14,3 +14,11 @@ export const formatTime = (date: Date) => {
       [hour, minute, second].map(formatNumber).join(':')}`
   );
 };
+
+export const formatTimeString = (time: string) => {
+  const dateAndTime = time.split('T');
+  if(!dateAndTime[1]) return '';
+  const times = dateAndTime[1].split(':');
+
+  return `${dateAndTime[0]}  ${Number(times[0])+8}:${times[1]}`;
+};

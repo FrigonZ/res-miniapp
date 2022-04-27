@@ -22,7 +22,7 @@ export const requestWithPromise = (
         resolve(data);
       } else {
         console.log(res);
-        resolve({});
+        resolve(null);
       }
     },
   });

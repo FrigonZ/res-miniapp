@@ -6,6 +6,7 @@ import { setToken } from './utils/token';
 App<IAppOption>({
   globalData: {
     token: '',
+    dishes: [],
   },
   onLaunch() {
     // 展示本地存储能力
@@ -23,10 +24,11 @@ App<IAppOption>({
             data: { code: res.code },
           });
 
-          const { token } = resData;
+          const { token } = resData || {};
           if (token) {
             this.globalData.token = token;
             setToken(token);
+            console.log('setToken')
           }
         }
       },
