@@ -5,7 +5,7 @@
     },
     "miniprogramRoot": "miniprogram/",
     "compileType": "miniprogram",
-    "libVersion": "2.15.0",
+    "libVersion": "2.24.0",
     "projectname": "mini-demo",
     "setting": {
         "urlCheck": false,

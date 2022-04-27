@@ -5,6 +5,7 @@ export const CGI = {
   DISH: '/dish',
   ORDER: '/order',
   GROUP: '/group',
+  ORDER_LIST: '/order/list',
 };
 
 /** 返回错误码 */

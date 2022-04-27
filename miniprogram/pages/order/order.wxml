@@ -1,6 +1,13 @@
-<!--logs.wxml-->
-<view class="container log-list">
-  <block wx:for="{{logs}}" wx:key="timeStamp" wx:for-item="log">
-    <text class="log-item">{{index + 1}}. {{log.date}}</text>
+<scroll-view
+  class="order-page"
+  scroll-y
+  refresher-enabled
+  refresher-triggered="{{isRefreshing}}"
+  bindrefresherrefresh="refresh"
+>
+  <block wx:for="{{orders}}" wx:key="timeStamp" wx:for-item="order">
+    <Order order="{{order}}" bindrefreshevent="refresh"></Order>
   </block>
-</view>
+  <view class="mask" wx:if="{{canShowDetail}}"></view>
+  <order-detail wx:if="{{canShowDetail}}"></order-detail>
+</scroll-view>

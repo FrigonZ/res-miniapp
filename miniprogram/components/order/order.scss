@@ -1,0 +1,137 @@
+$shadow: rgba(0,0,0,0.1);
+$main: #AD2102;
+
+.order-item {
+  width: 100%;
+  padding: 0 16px;
+}
+
+.order-wrap {
+  width: 100%;
+  background-color: #fff;
+  padding: 16px 18px;
+  margin: 12px 0;
+  border-radius: 16px;
+  box-shadow: 0 0 10px $shadow;
+}
+
+.order-top {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.order-title {
+  width: 500rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.order-id {
+  height: 18px;
+  line-height: 18px;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+.order-seat {
+  height: 14px;
+  font-size: 12px;
+  line-height: 12px;
+  padding: 1px 6px 1px 10px;
+  background-color: $main;
+  color: #fff;
+  font-weight: 300;
+  border-radius: 14px 7px 7px 2px;
+  margin-left: 16px;
+}
+
+.order-status {
+  height: 18px;
+  line-height: 18px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #444;
+}
+
+.order-middle {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.order-scroll {
+  width: 520rpx;
+}
+
+.order-dish-wrap {
+  width: 160rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+
+.order-pic {
+  width: 160rpx;
+  height: 120rpx;
+  border-radius: 8px;
+}
+
+.order-dish-name {
+  max-width: 160rpx;
+  display: block;
+  font-size: 14px;
+  line-height: 14px;
+  margin-top: 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.row-wrap {
+  min-width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.order-price {
+  line-height: 20px;
+  font-size: 18px;
+  font-weight: bolder;
+  padding: 0 4px 8px 0;
+}
+
+.order-bottom {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.order-time {
+  color: #ccc;
+  font-size: 12px;
+}
+
+.order-cancel {
+  color: $main;
+  font-size: 14px;
+  padding-top: 8px;
+}
+
+.order-finish {
+  color: #ccc;
+  font-size: 14px;
+  padding-top: 8px;
+}
