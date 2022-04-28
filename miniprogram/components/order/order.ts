@@ -55,6 +55,13 @@ Component({
           this.triggerEvent('refreshevent');
         }
       });
-    }
+    },
+
+    openDetail() {
+      this.triggerEvent('tapevent', {
+        order: this.properties.order,
+        dishes: this.data.dishes,
+      });
+    },
   },
 });

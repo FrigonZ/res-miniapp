@@ -1,3 +1,33 @@
-<view>
-  order-dish
+<view class="order-detail-container">
+  <view class="order-detail-title">订单详情</view>
+  <scroll-view
+    class="order-detail-content"
+    scroll-y
+  >
+    <view class="order-detail-oid">{{'#'+order.oid}}</view>
+    <view class="order-detail-status">{{status[order.status]}}</view>
+    <view class="order-detail-subtitle">我的点餐</view>
+    <block wx:for="{{dishes}}" wx:key="timeStamp" wx:for-item="dish">
+      <bucket-item bucket="{{dish}}"></bucket-item>
+    </block>
+    <view class="order-form">
+      <view class="order-form-item">共计</view>
+      <view class="order-detal-price">{{'¥'+order.price}}</view>
+    </view>
+    <view class="order-form">
+      <view class="order-form-item">座位</view>
+      <view class="order-form-item">{{order.seat}}</view>
+    </view>
+    <view class="order-form">
+      <view class="order-form-item">时间</view>
+      <view class="order-form-item">{{time}}</view>
+    </view>
+    <view class="blank"></view>
+  </scroll-view>
+  <view class="order-detail-bottom">
+    <view
+      class="{{canCancel ? 'order-detail-cancel' : 'order-detail-finish'}}"
+      bindtap="cancel"
+    >取消订单</view>
+  </view>
 </view>

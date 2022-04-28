@@ -7,7 +7,7 @@
       </view>
       <view class="order-status">{{status[order.status]}}</view>
     </view>
-    <view class="order-middle">
+    <view class="order-middle" bindtap="openDetail">
       <scroll-view class="order-scroll" scroll-x>
         <view class="row-wrap">
           <block wx:for="{{dishes}}" wx:key="timeStamp" wx:for-item="dish">
