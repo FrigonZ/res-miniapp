@@ -1,3 +1,6 @@
 {
-    "component": true
+    "component": true,
+    "usingComponents": {
+        "bucket-item": "/components/bucket-item/bucket-item"
+    }
 }

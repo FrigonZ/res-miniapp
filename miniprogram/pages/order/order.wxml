@@ -1,13 +1,28 @@
-<scroll-view
-  class="order-page"
-  scroll-y
-  refresher-enabled
-  refresher-triggered="{{isRefreshing}}"
-  bindrefresherrefresh="refresh"
->
-  <block wx:for="{{orders}}" wx:key="timeStamp" wx:for-item="order">
-    <Order order="{{order}}" bindrefreshevent="refresh"></Order>
-  </block>
-  <view class="mask" wx:if="{{canShowDetail}}"></view>
-  <order-detail wx:if="{{canShowDetail}}"></order-detail>
-</scroll-view>
+<view class="order-wrapper">
+  <scroll-view
+    class="order-page"
+    scroll-y
+    refresher-enabled
+    refresher-triggered="{{isRefreshing}}"
+    bindrefresherrefresh="refresh"
+  >
+    <block wx:for="{{orders}}" wx:key="timeStamp" wx:for-item="order">
+      <Order
+        order="{{order}}"
+        bindrefreshevent="refresh"
+        bindtapevent="openOrderDetail"
+      ></Order>
+    </block>
+  </scroll-view>
+  <view
+    class="mask"
+    wx:if="{{canShowDetail}}"
+    bindtap="closeOrderDetail"
+  ></view>
+  <order-detail
+    wx:if="{{canShowDetail}}"
+    order="{{orderDetail.order}}"
+    dishes="{{orderDetail.dishes}}"
+    bindrefreshevent="refresh"
+  ></order-detail>
+</view>

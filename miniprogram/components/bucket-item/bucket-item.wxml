@@ -1,0 +1,17 @@
+<view class="bucket-item-container">
+  <image
+    class="bucket-image"
+    src="{{bucket.pic}}"
+    mode="aspectFill"
+  >
+  </image>
+  <view class="bucket-item-right">
+    <view class="bucket-name">{{bucket.name}}</view>
+    <view class="bucket-bottom">
+      <text class="bucket-num">{{bucket.options.length+'份'}}</text>
+      <view class="bucket-item-buttons">
+        <view class="bucket-price">{{'¥' + price}}</view>
+      </view>
+    </view>
+  </view>
+</view>

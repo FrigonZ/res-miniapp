@@ -54,5 +54,22 @@ Page({
         isRefreshing: false,
       });
     });
-  }
+  },
+
+  openOrderDetail(e: any) {
+    const { order, dishes } = e.detail;
+    this.setData({
+      orderDetail: {
+        order,
+        dishes,
+      },
+      canShowDetail: true,
+    });
+  },
+
+  closeOrderDetail() {
+    this.setData({
+      canShowDetail: false,
+    });
+  },
 });
