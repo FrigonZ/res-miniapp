@@ -8,20 +8,18 @@ Component({
   },
 
   data: {
-    icon: IMAGE.ADD,
+    icon: IMAGE.CLOSE,
   },
 
   methods: {
-    add(e: any) {
-      const { did } = e.currentTarget.dataset;
+    add() {
+      const { did } = this.properties.dish;
       this.triggerEvent('addevent', {
         did,
       });
     },
-    showDetail() {
-      this.triggerEvent('detailevent', {
-        dish: this.properties.dish,
-      });
+    close() {
+      this.triggerEvent('closeevent');
     },
   },
 });

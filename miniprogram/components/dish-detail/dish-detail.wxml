@@ -1,0 +1,17 @@
+<view class="dish-detail-container">
+  <image
+    class="dish-detail-img" 
+    src="{{dish.pic}}"
+    mode="aspectFill"
+  ></image>
+  <image class="dish-detail-close" src="{{icon}}" bindtap="close"></image>
+  <view class="dish-detail-name">{{dish.name}}</view>
+  <scroll-view class="dish-detail-scroll">
+    <view class="dish-detail-content">
+      <view class="dish-detail-desc">{{dish.desc || '暂无简介'}}</view>
+    </view>
+  </scroll-view>
+  <view class="dish-detail-bottom">
+    <view class="dish-detail-button" bindtap="add">{{'¥'+dish.price+'加入购物车'}}</view>
+  </view>
+</view>

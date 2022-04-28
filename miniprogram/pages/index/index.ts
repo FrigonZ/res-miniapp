@@ -28,6 +28,8 @@ Page({
     currentGroup: 0,
     scrollTo: '',
     banner: IMAGE.BANNER,
+    canShowDetail: false,
+    dishDetail: {},
   },
   // 事件处理函数
   jumpToOrder() {
@@ -115,6 +117,18 @@ Page({
       canScroll,
     });
   },
+  showDetail(e:any) {
+    const { dish } = e.detail;
+    this.setData({
+      dishDetail: dish,
+      canShowDetail: true,
+    });
+  },
+  closeDetail() {
+    this.setData({
+      canShowDetail: false,
+    });
+  },
   addBucket(e: any) {
     const { did } = e.detail;
     const dish = this.data.dishes.find((d: DishProps) => d.did === did);
@@ -124,6 +138,7 @@ Page({
     this.setData({
       buckets: bucket as any,
       price,
+      canShowDetail: false,
     });
   },
   minusBucket(e: any) {
@@ -134,13 +149,27 @@ Page({
       buckets: bucket as any,
       price,
     });
+    if (bucket.length === 0) {
+      this.setData({
+        canShowBucket: false,
+      });
+    }
   },
   toggleBucket() {
+    if (!this.data.canShowBucket && this.data.buckets.length === 0) return;
     this.setData({
       canShowBucket: !this.data.canShowBucket,
     });
   },
+  clearBucket() {
+    this.setData({
+      buckets: [],
+      price: 0,
+      canShowBucket: false,
+    });
+  },
   submitOrder() {
+    if (this.data.buckets.length === 0) return;
     const formatBuckets = formatBucket(this.data.buckets);
     requestWithPromise({
       url: CGI.ORDER,
@@ -156,6 +185,8 @@ Page({
       if (order) {
         this.setData({
           buckets: [],
+          canShowBucket: false,
+          price: 0,
         });
       }
     });
