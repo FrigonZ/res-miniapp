@@ -3,6 +3,7 @@
     class="dish-image"
     src="{{dish.pic}}"
     mode="aspectFill"
+    bindtap="showDetail"
   >
   </image>
   <view class="dish-right">

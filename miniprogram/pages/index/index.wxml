@@ -1,58 +1,68 @@
 <!--index.wxml-->
-<scroll-view
-  class="container"
-  scroll-y
-  bindscrolltoupper="handleDragUp"
-  bindscrolltolower="handleDragLow"
-  bounces="{{false}}"
-  upper-threshold="100"
-  lower-threshold="100"
-  >
-  <image class="banner" src="{{banner}}" mode="aspectFill"></image>
-  <view class="bg">
-    <view class="{{canScroll ? 'content-fill' : 'content'}}">
-      <view class="header">
-        <text class="current-seat">{{'当前座位号:' + seat}}</text>
-        <view bindtap="jumpToOrder">我的订单</view>
-      </view>
-      <view class="dish-wrap">
-        <scroll-view class="dish-left">
-          <block wx:for="{{groups}}" wx:key="timeStamp" wx:for-item="group">
-            <view
-              class="{{currentGroup === group.gid ? 'group-selected' : 'group-wrap'}}"
-              data-gid="{{group.gid}}"
-              bindtap="setGroup"
-            >
-              <text class="group-text">{{group.name}}</text>
-            </view>
-          </block>
-        </scroll-view>
-        <scroll-view
-          class="dish-right"
-          scroll-y="{{canScroll}}"
-          scroll-with-animation
-          scroll-into-view="{{scrollTo}}"
-        >
-          <block wx:for="{{groups}}" wx:key="timeStamp" wx:for-item="group">
-            <view id="{{'g-' + group.gid}}">{{group.name}}</view>
-            <block wx:for="{{group.dishes}}" wx:key="timeStamp" wx:for-item="dish">
-              <Dish dish="{{dish}}" bindaddevent="addBucket"></Dish>
+<view class="out-wrap">
+  <scroll-view
+    class="container"
+    scroll-y
+    bindscrolltoupper="handleDragUp"
+    bindscrolltolower="handleDragLow"
+    bounces="{{false}}"
+    upper-threshold="100"
+    lower-threshold="100"
+    >
+    <image class="banner" src="{{banner}}" mode="aspectFill"></image>
+    <view class="bg">
+      <view class="{{canScroll ? 'content-fill' : 'content'}}">
+        <view class="header">
+          <text class="current-seat">{{'当前座位号:' + seat}}</text>
+          <view bindtap="jumpToOrder">我的订单</view>
+        </view>
+        <view class="dish-wrap">
+          <scroll-view class="dish-left">
+            <block wx:for="{{groups}}" wx:key="timeStamp" wx:for-item="group">
+              <view
+                class="{{currentGroup === group.gid ? 'group-selected' : 'group-wrap'}}"
+                data-gid="{{group.gid}}"
+                bindtap="setGroup"
+              >
+                <text class="group-text">{{group.name}}</text>
+              </view>
             </block>
-          </block>
-          <button bindtap="submitOrder">test</button>
-        </scroll-view>
+          </scroll-view>
+          <scroll-view
+            class="dish-right"
+            scroll-y="{{canScroll}}"
+            scroll-with-animation
+            scroll-into-view="{{scrollTo}}"
+          >
+            <block wx:for="{{groups}}" wx:key="timeStamp" wx:for-item="group">
+              <view id="{{'g-' + group.gid}}" class="dish-subtitle">{{group.name}}</view>
+              <block wx:for="{{group.dishes}}" wx:key="timeStamp" wx:for-item="dish">
+                <Dish
+                  dish="{{dish}}"
+                  bindaddevent="addBucket"
+                  binddetailevent="showDetail"
+                ></Dish>
+              </block>
+            </block>
+            <view class="blank"></view>
+          </scroll-view>
+        </view>
       </view>
     </view>
-  </view>
+  </scroll-view>
   <view class="fix-bottom">
-    <view class="bottom-wrap">
-      <view bindtap="toggleBucket" class="price-zone">
-        <text>{{price}}</text>
+      <view class="bottom-wrap">
+        <view bindtap="toggleBucket" class="price-zone">
+          <text>{{'¥'+price}}</text>
+        </view>
+        <view class="purchase" bindtap="submitOrder">下单</view>
       </view>
-      <view class="purchase" bindtap="submitOrder">下单</view>
-    </view>
   </view>
   <view class="bucket" wx:if="{{canShowBucket}}">
+    <view class="bucket-top">
+        <view class="bucket-top-title">已选餐品</view>
+        <view class="bucket-top-clear" bindtap="clearBucket">清空</view>
+      </view>
     <scroll-view
       class="bucket-list"
       scroll-y
@@ -67,5 +77,15 @@
     </scroll-view>
   </view>
   <view class="mask" wx:if="{{canShowBucket}}" bindtap="toggleBucket"></view>
+  <dish-detail
+    dish="{{dishDetail}}"
+    wx:if="{{canShowDetail}}"
+    bindaddevent="addBucket"
+    bindcloseevent="closeDetail"
+  ></dish-detail>
+  <view class="mask"
+    wx:if="{{canShowDetail}}"
+    bindtap="closeDetail"
+  ></view>
   <view class="bottom-mask"></view>
-</scroll-view>
+</view>
