@@ -7,6 +7,10 @@
   </image>
   <view class="bucket-right">
     <view class="bucket-name">{{bucket.name}}</view>
+    <view
+      class="bucket-option"
+      wx:if="{{hasOptions}}"
+    >{{optionText}}</view>
     <view class="bucket-bottom">
       <view class="bucket-price">{{'¥' + bucket.price}}</view>
       <view class="bucket-buttons">

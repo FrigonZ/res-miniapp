@@ -9,6 +9,16 @@ Component({
 
   data: {
     icon: IMAGE.ADD,
+    hasOptions: false,
+  },
+
+  lifetimes: {
+    attached() {
+      const { options = [] } = this.properties.dish;
+      if (options.length) this.setData({
+        hasOptions: true,
+      });
+    },
   },
 
   methods: {

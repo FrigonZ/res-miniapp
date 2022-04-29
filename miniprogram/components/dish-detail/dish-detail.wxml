@@ -9,9 +9,27 @@
   <scroll-view class="dish-detail-scroll">
     <view class="dish-detail-content">
       <view class="dish-detail-desc">{{dish.desc || '暂无简介'}}</view>
+      <view wx:if="{{hasOptions}}">
+        <block wx:for="{{dish.options}}" wx:key="timeStamp" wx:for-item="option" wx:for-index="idx">
+          <view class="dish-detail-group">{{option.group}}</view>
+          <view class="dish-choice-wrap">
+            <block wx:for="{{choices[idx]}}" wx:key="timeStamp" wx:for-item="choice" wx:for-index="index">
+              <view
+                class="{{index === current[idx] ? 'dish-choice-selected': 'dish-choice'}}"
+                data-group="{{idx}}"
+                data-choice="{{index}}"
+                bindtap="select"
+              >
+                <view>{{choice.key}}</view>
+                <view wx:if="{{choice.price>0}}">{{'+¥'+choice.price}}</view>
+              </view>
+            </block>
+          </view>
+        </block>
+      </view>
     </view>
   </scroll-view>
   <view class="dish-detail-bottom">
-    <view class="dish-detail-button" bindtap="add">{{'¥'+dish.price+'加入购物车'}}</view>
+    <view class="dish-detail-button" bindtap="add">{{'¥'+price+'加入购物车'}}</view>
   </view>
 </view>

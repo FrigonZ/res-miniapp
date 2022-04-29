@@ -23,6 +23,7 @@ Page({
     canScroll: false,
     seat: '1',
     buckets: [],
+    optionsBuckets: [],
     price: 0,
     canShowBucket: false,
     currentGroup: 0,
@@ -63,6 +64,7 @@ Page({
         data: {},
       }).then((dishRes) => {
         const { dishList = [] } = dishRes || {};
+        console.log(dishList)
         groups.forEach((group: any) => {
           group.dishes =
             dishList.filter((dish: DishProps) => dish.group === group.gid && dish.status === DishStatus.NORMAL) || [];
@@ -130,23 +132,47 @@ Page({
     });
   },
   addBucket(e: any) {
-    const { did } = e.detail;
-    const dish = this.data.dishes.find((d: DishProps) => d.did === did);
+    const { did, options, price: finalPrice } = e.detail;
+    const { buckets, optionsBuckets, dishes } = this.data;
+    const dish = dishes.find((d: DishProps) => d.did === did);
     if (!dish) return;
-    const bucket = checkAndAdd(this.data.buckets, dish);
-    const price = calcPrice(bucket);
-    this.setData({
-      buckets: bucket as any,
-      price,
-      canShowDetail: false,
-    });
+
+    if (!options) {
+      const bucket = checkAndAdd(buckets, dish);
+      const price = calcPrice(bucket, optionsBuckets);
+      this.setData({
+        buckets: bucket as any,
+        price,
+        canShowDetail: false,
+      });
+    } else {
+      const target = {
+        ...(dish as any),
+        options: [options],
+        price: finalPrice,
+        bid: Date.now(),
+      };
+      const opBucket = [
+        ...optionsBuckets,
+        target,
+      ];
+      const price = calcPrice(buckets, opBucket);
+      this.setData({
+        optionsBuckets: opBucket as any,
+        price,
+        canShowDetail: false,
+      });
+    }
   },
   minusBucket(e: any) {
     const { bid } = e.detail;
-    const bucket = removeBucket(this.data.buckets, bid);
-    const price = calcPrice(bucket);
+    const { buckets, optionsBuckets } = this.data;
+    const bucket = removeBucket(buckets, bid);
+    const opBucket = removeBucket(optionsBuckets, bid);
+    const price = calcPrice(bucket, opBucket);
     this.setData({
       buckets: bucket as any,
+      optionsBuckets: opBucket as any,
       price,
     });
     if (bucket.length === 0) {
@@ -156,7 +182,9 @@ Page({
     }
   },
   toggleBucket() {
-    if (!this.data.canShowBucket && this.data.buckets.length === 0) return;
+    const { buckets, optionsBuckets } = this.data;
+    const hasBucket = buckets.length !== 0 || optionsBuckets.length !== 0;
+    if (!this.data.canShowBucket && !hasBucket) return;
     this.setData({
       canShowBucket: !this.data.canShowBucket,
     });
@@ -164,13 +192,17 @@ Page({
   clearBucket() {
     this.setData({
       buckets: [],
+      optionsBuckets: [],
       price: 0,
       canShowBucket: false,
     });
   },
   submitOrder() {
-    if (this.data.buckets.length === 0) return;
-    const formatBuckets = formatBucket(this.data.buckets);
+    const { buckets, optionsBuckets } = this.data;
+    const hasBucket = buckets.length !== 0 || optionsBuckets.length !== 0;
+    if (!hasBucket) return;
+    const formatBuckets = formatBucket(buckets);
+    const formatOpBuckets = formatBucket(optionsBuckets);
     requestWithPromise({
       url: CGI.ORDER,
       method: 'POST',
@@ -178,13 +210,17 @@ Page({
         order: {
           seat: this.data.seat,
         },
-        dishes: formatBuckets,
+        dishes: [
+          ...formatBuckets,
+          ...formatOpBuckets,
+        ],
       },
     }).then((res) => {
       const { order } = res || {};
       if (order) {
         this.setData({
           buckets: [],
+          optionsBuckets: [],
           canShowBucket: false,
           price: 0,
         });

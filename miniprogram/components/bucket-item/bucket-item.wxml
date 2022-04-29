@@ -7,6 +7,10 @@
   </image>
   <view class="bucket-item-right">
     <view class="bucket-name">{{bucket.name}}</view>
+    <view
+      class="bucket-option"
+      wx:if="{{hasOptions}}"
+    >{{optionText}}</view>
     <view class="bucket-bottom">
       <text class="bucket-num">{{bucket.options.length+'份'}}</text>
       <view class="bucket-item-buttons">
