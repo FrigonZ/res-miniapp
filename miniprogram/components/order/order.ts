@@ -1,4 +1,4 @@
-import { DishBucket, DishProps, OrderStatus } from "../../constant/entity";
+import { DishBucket, DishProps, OrderDish, OrderStatus } from "../../constant/entity";
 import { CGI } from "../../constant/request";
 import { checkAndAdd } from "../../utils/dish";
 import { requestWithPromise } from "../../utils/request";
@@ -14,7 +14,7 @@ Component({
   },
 
   data: {
-    dishes: [],
+    dishes: [] as DishBucket[],
     status: ['制作中', '已完成', '已取消'],
     time: '',
     onProcess: 0,
@@ -23,19 +23,38 @@ Component({
   lifetimes: {
     attached() {
       const dishes = app.globalData.dishes || [];
-      const myDish = this.properties.order.dishes.map((dish: any) => {
+      const myDish = this.properties.order.dishes.map((dish: OrderDish) => {
         const { did } = dish;
-        return dishes.find((dish) => dish.did === did) || {};
+        const target = dishes.find((dish) => dish.did === did);
+        if (!target) return {};
+        return {
+          ...target,
+          options: dish.option,
+        };
       });
       const bucket: DishBucket[] = [];
+      const opBucket: DishBucket[] = [];
 
-      myDish.forEach((dish: DishProps) => {
+      const rawDishes = myDish.filter((dish: DishProps) => !dish.options?.length);
+      const opDishes = myDish.filter((dish: DishProps) => dish.options?.length);
+
+      rawDishes.forEach((dish: DishProps) => {
         checkAndAdd(bucket, dish);
-      })
+      });
+
+      opDishes.forEach((dish: DishProps) => {
+        opBucket.push({
+          ...dish,
+          options: [dish.options || []],
+        });
+      });
       const time = formatTimeString(this.properties.order.time);
 
       this.setData({
-        dishes: bucket as any,
+        dishes: [
+          ...bucket,
+          ...opBucket,
+        ],
         time,
       });
     },

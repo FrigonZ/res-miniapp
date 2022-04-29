@@ -11,8 +11,14 @@
     <text class="dish-desc">{{dish.desc}}</text>
     <view class="dish-bottom">
       <view class="dish-price">{{'¥' + dish.price}}</view>
+      <view
+        class="dish-diy"
+        wx:if="{{hasOptions}}"
+        bindtap="showDetail"
+      >选规格</view>
       <image
         class="add-dish"
+        wx:if="{{!hasOptions}}"
         src="{{icon}}"
         mode="aspectFit"
         data-did="{{dish.did}}"

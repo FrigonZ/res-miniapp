@@ -74,6 +74,14 @@
           bindminusevent="minusBucket"
         ></Bucket>
       </block>
+      <block wx:for="{{optionsBuckets}}" wx:key="timeStamp" wx:for-item="bucket">
+        <Bucket
+          bucket="{{bucket}}"
+          bindaddevent="addBucket"
+          bindminusevent="minusBucket"
+          binddetailevent="showDetail"
+        ></Bucket>
+      </block>
     </scroll-view>
   </view>
   <view class="mask" wx:if="{{canShowBucket}}" bindtap="toggleBucket"></view>
