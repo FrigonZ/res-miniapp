@@ -163,6 +163,10 @@ Page({
         canShowDetail: false,
       });
     }
+    wx.showToast({
+      title: '加入购物车成功',
+      icon: 'none',
+    });
   },
   minusBucket(e: any) {
     const { bid } = e.detail;
@@ -190,12 +194,17 @@ Page({
     });
   },
   clearBucket() {
-    this.setData({
-      buckets: [],
-      optionsBuckets: [],
-      price: 0,
-      canShowBucket: false,
-    });
+    wx.showModal({
+      content: '是否清空购物车',
+      success: (res) => {
+        if (res.confirm) this.setData({
+          buckets: [],
+          optionsBuckets: [],
+          price: 0,
+          canShowBucket: false,
+        });
+      },
+    })
   },
   submitOrder() {
     const { buckets, optionsBuckets } = this.data;
@@ -223,6 +232,16 @@ Page({
           optionsBuckets: [],
           canShowBucket: false,
           price: 0,
+        });
+        wx.showToast({
+          title: '下单成功',
+          icon: 'none',
+        })
+        this.jumpToOrder();
+      } else {
+        wx.showToast({
+          title: '店铺休息中',
+          icon: 'none',
         });
       }
     });
