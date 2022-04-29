@@ -64,16 +64,32 @@ Component({
     cancel(e: any) {
       const { status } = this.data.order;
       if (status !== OrderStatus.ON_PROCESS) return;
-      const { oid } = e.currentTarget.dataset;
-      requestWithPromise({
-        url: `${CGI.ORDER}/${oid}`,
-        method: 'PUT',
-        data: {},
-      }).then((res) => {
-        if (res) {
-          this.triggerEvent('refreshevent');
-        }
-      });
+      wx.showModal({
+        content: '确定要取消订单',
+        success: (res) => {
+          if (res.confirm) {
+            const { oid } = e.currentTarget.dataset;
+            requestWithPromise({
+              url: `${CGI.ORDER}/${oid}`,
+              method: 'PUT',
+              data: {},
+            }).then((res) => {
+              if (res) {
+                wx.showToast({
+                  title: '取消订单成功',
+                  icon: 'none',
+                });
+                this.triggerEvent('refreshevent');
+              } else {
+                wx.showToast({
+                  title: '订单取消失败',
+                  icon: 'none',
+                });
+              }
+            });
+          }
+        },
+      })
     },
 
     openDetail() {

@@ -34,18 +34,34 @@ Component({
     cancel() {
       const { oid } = this.properties.order;
       if (!this.data.canCancel) return;
-      requestWithPromise({
-        url: `${CGI.ORDER}/${oid}`,
-        method: 'PUT',
-        data: {},
-      }).then((res) => {
-        if (res) {
-          this.triggerEvent('refreshevent');
-          this.setData({
-            canCancel: false,
-          });
+      wx.showModal({
+        content: '确定要取消订单',
+        success: (res) => {
+          if(res.confirm) {
+            requestWithPromise({
+              url: `${CGI.ORDER}/${oid}`,
+              method: 'PUT',
+              data: {},
+            }).then((res) => {
+              if (res) {
+                this.triggerEvent('refreshevent');
+                this.setData({
+                  canCancel: false,
+                });
+                wx.showToast({
+                  title: '取消订单成功',
+                  icon: 'none',
+                });
+              } else {
+                wx.showToast({
+                  title: '订单取消失败',
+                  icon: 'none',
+                });
+              }
+            });
+          }
         }
-      });
+      })
     },
   },
 });
