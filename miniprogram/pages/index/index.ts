@@ -2,7 +2,7 @@
 
 import { CGI } from '../../constant/request';
 import { requestWithPromise } from '../../utils/request';
-import { DishProps, DishStatus } from '../../constant/entity';
+import { Discount, DishProps, DishStatus } from '../../constant/entity';
 import {
   calcPrice, checkAndAdd, formatBucket, removeBucket,
 } from '../../utils/dish';
@@ -31,6 +31,10 @@ Page({
     banner: IMAGE.BANNER,
     canShowDetail: false,
     dishDetail: {},
+    discounts: [] as Discount[],
+    discount: 0,
+    distence: -1,
+    offset: -1,
   },
   // 事件处理函数
   jumpToOrder() {
@@ -76,6 +80,17 @@ Page({
         });
         app.globalData.dishes = dishList;
       });
+    });
+
+    requestWithPromise({
+        url: CGI.DISCOUNT,
+        method: 'GET',
+        data: {},
+    }).then((res) => {
+        const { discounts } = res;
+        if (discounts) this.setData({
+            discounts,
+        });
     });
   },
   getUserProfile() {
@@ -133,17 +148,20 @@ Page({
   },
   addBucket(e: any) {
     const { did, options, price: finalPrice } = e.detail;
-    const { buckets, optionsBuckets, dishes } = this.data;
+    const { buckets, optionsBuckets, dishes, discounts } = this.data;
     const dish = dishes.find((d: DishProps) => d.did === did);
     if (!dish) return;
 
     if (!options) {
       const bucket = checkAndAdd(buckets, dish);
-      const price = calcPrice(bucket, optionsBuckets);
+      const { price, discount, distence, offset } = calcPrice(bucket, optionsBuckets, discounts);
       this.setData({
         buckets: bucket as any,
         price,
         canShowDetail: false,
+        discount,
+        distence,
+        offset,
       });
     } else {
       const target = {
@@ -156,11 +174,14 @@ Page({
         ...optionsBuckets,
         target,
       ];
-      const price = calcPrice(buckets, opBucket);
+      const { price, discount, distence, offset } = calcPrice(buckets, opBucket, discounts);
       this.setData({
         optionsBuckets: opBucket as any,
         price,
         canShowDetail: false,
+        discount,
+        distence,
+        offset,
       });
     }
     wx.showToast({
@@ -170,14 +191,17 @@ Page({
   },
   minusBucket(e: any) {
     const { bid } = e.detail;
-    const { buckets, optionsBuckets } = this.data;
+    const { buckets, optionsBuckets, discounts } = this.data;
     const bucket = removeBucket(buckets, bid);
     const opBucket = removeBucket(optionsBuckets, bid);
-    const price = calcPrice(bucket, opBucket);
+    const { price, discount, distence, offset } = calcPrice(bucket, opBucket, discounts);
     this.setData({
       buckets: bucket as any,
       optionsBuckets: opBucket as any,
       price,
+      discount,
+      distence,
+      offset,
     });
     if (bucket.length === 0) {
       this.setData({

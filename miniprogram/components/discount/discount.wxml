@@ -1,0 +1,3 @@
+<view class="discount-view">
+    {{'折扣:'+text}}
+</view>

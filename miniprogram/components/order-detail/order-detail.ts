@@ -35,7 +35,8 @@ Component({
       const { oid } = this.properties.order;
       if (!this.data.canCancel) return;
       wx.showModal({
-        content: '确定要取消订单',
+        title: '确定要取消订单',
+        content: '已经制作的订单不会退款',
         success: (res) => {
           if(res.confirm) {
             requestWithPromise({

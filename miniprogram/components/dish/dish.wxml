@@ -4,6 +4,7 @@
     src="{{dish.pic}}"
     mode="aspectFill"
     bindtap="showDetail"
+    aria-label="{{dish.name}}"
   >
   </image>
   <view class="dish-right">
@@ -23,6 +24,7 @@
         mode="aspectFit"
         data-did="{{dish.did}}"
         bindtap="add"
+        aria-label="添加至购物车"
       ></image>
     </view>
   </view>

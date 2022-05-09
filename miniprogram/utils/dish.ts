@@ -1,4 +1,4 @@
-import { DishBucket, DishOption, DishProps } from '../constant/entity';
+import { Discount, DishBucket, DishOption, DishProps } from '../constant/entity';
 
 export const checkAndAdd = (bucket: DishBucket[], dish: DishProps) => {
   const index = bucket.findIndex((item) => item.did === dish.did);
@@ -31,7 +31,7 @@ export const removeBucket = (bucket: DishBucket[], bid: number) => {
   return bucket;
 };
 
-export const calcPrice = (bucket: DishBucket[], optionBucket: DishBucket[]) => {
+export const calcPrice = (bucket: DishBucket[], optionBucket: DishBucket[], discounts: Discount[]) => {
   let price = 0;
   bucket.forEach((item) => {
     item.options.forEach(() => {
@@ -43,7 +43,13 @@ export const calcPrice = (bucket: DishBucket[], optionBucket: DishBucket[]) => {
       price += item.price;
     });
   });
-  return price;
+
+  const discount = calcDiscount(price, discounts);
+
+  return {
+      price: price - discount.discount,
+      ...discount,
+  };
 };
 
 export const formatBucket = (bucket: DishBucket[]) => {
@@ -81,4 +87,32 @@ export const stringsifyContent = (content: Record<string, number>, showPrice = f
   }
   return tmp.join(',');
 };
+
+export const calcDiscount = (price: number, discounts: Discount[]) => {
+    if (!discounts.length) return {
+        discount: 0,
+        distence: -1,
+        offset: -1,
+    };
+
+    const index = discounts.findIndex((discount) => discount.standard <= price);
+    if (index === -1) return {
+        discount: 0,
+        distence: discounts[discounts.length - 1].standard - price,
+        offset: discounts[discounts.length - 1].discount,
+    };
+
+    if (index === 0) return {
+        discount: discounts[0].discount,
+        distence: -1,
+        offset: -1,
+    };
+
+  
+    return {
+        discount: discounts[index].discount,
+        distence: discounts[index - 1].standard - price,
+        offset: discounts[index - 1].discount - discounts[index].discount,
+    };
+  };
 

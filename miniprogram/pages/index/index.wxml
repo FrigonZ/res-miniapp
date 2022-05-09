@@ -12,9 +12,12 @@
     <image class="banner" src="{{banner}}" mode="aspectFill"></image>
     <view class="bg">
       <view class="{{canScroll ? 'content-fill' : 'content'}}">
-        <view class="header">
-          <text class="current-seat">{{'当前座位号:' + seat}}</text>
-          <view bindtap="jumpToOrder">我的订单</view>
+        <view class="header">   
+          <view class="seat-wrap">
+            <text class="current-seat">{{'当前座位号:' + seat}}</text>
+            <Discount discounts="{{discounts}}"></Discount>
+          </view>
+          <view aria-role="button" bindtap="jumpToOrder">我的订单</view>
         </view>
         <view class="dish-wrap">
           <scroll-view class="dish-left">
@@ -54,6 +57,10 @@
       <view class="bottom-wrap">
         <view bindtap="toggleBucket" class="price-zone">
           <text>{{'¥'+price}}</text>
+          <view wx:if="{{price > 0}}">
+            <text class="price-discount" wx:if="{{discount > 0}}">{{'已满减'+discount+'元,再消费'+distence+'元再减'+offset+'元'}}</text>
+            <text class="price-discount" wx:else>{{'再消费'+distence+'元减'+offset+'元'}}</text>
+          </view>
         </view>
         <view class="purchase" bindtap="submitOrder">下单</view>
       </view>

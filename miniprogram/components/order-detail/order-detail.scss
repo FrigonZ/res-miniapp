@@ -106,3 +106,11 @@ $main: #AD2102;
   border-radius: 15px;
   color: #ddd;
 }
+
+.order-discount {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 4px 0;
+  }

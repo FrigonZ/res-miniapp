@@ -6,6 +6,7 @@ export const CGI = {
   ORDER: '/order',
   GROUP: '/group',
   ORDER_LIST: '/order/list',
+  DISCOUNT: '/discount',
 };
 
 /** 返回错误码 */

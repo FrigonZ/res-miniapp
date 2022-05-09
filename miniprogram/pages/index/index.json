@@ -2,6 +2,7 @@
   "usingComponents": {
     "Dish": "/components/dish/dish",
     "Bucket": "/components/bucket/bucket",
+    "Discount": "/components/discount/discount",
     "dish-detail": "/components/dish-detail/dish-detail"
   }
 }

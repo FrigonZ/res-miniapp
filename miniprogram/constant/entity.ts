@@ -129,3 +129,9 @@ export interface Order {
   dishes: OrderDish[];
   price: number;
 }
+
+export interface Discount {
+    did?: number;
+    standard: number;
+    discount: number;
+  }
