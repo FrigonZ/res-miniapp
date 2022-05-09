@@ -10,6 +10,10 @@
     <block wx:for="{{dishes}}" wx:key="timeStamp" wx:for-item="dish">
       <bucket-item bucket="{{dish}}"></bucket-item>
     </block>
+    <view class="order-discount">
+      <view class="order-form-item">折扣</view>
+      <view class="order-form-item">{{order.discount}}</view>
+    </view>
     <view class="order-form">
       <view class="order-form-item">共计</view>
       <view class="order-detal-price">{{'¥'+order.price}}</view>
